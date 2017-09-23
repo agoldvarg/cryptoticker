@@ -4,7 +4,6 @@ import 'react-select/dist/react-select.css';
 import Select from 'react-select';
 
 import Card from './Components/Card/Card.jsx';
-import Center from './Components/Center/Center.jsx';
 import Currency from './Components/Currency/Currency.jsx';
 
 class App extends Component {
@@ -48,24 +47,22 @@ class App extends Component {
 
     return(
       <div className="App">
-        <Center>
-          <Card>
-            <Select
-              className="Select"
-              clearable={false}
-              placeholder="Select Pair..."
-              name="form-field-name"
-              onChange={this.onSelectPair}
-              options={options}
-              searchable={false}
-              value={this.state.pair}
-            />
-            <Currency
-              symbol="usd"
-              value={this.state.price}
-            />
-          </Card>
-        </Center>
+        <Card>
+          <Select
+            className="Select"
+            clearable={false}
+            placeholder="Select Pair..."
+            name="form-field-name"
+            onChange={this.onSelectPair}
+            options={options}
+            searchable={false}
+            value={this.state.pair}
+          />
+          <Currency
+            symbol="usd"
+            value={this.state.price}
+          />
+        </Card>
       </div>
     );
   }
