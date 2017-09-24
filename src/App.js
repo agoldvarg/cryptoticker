@@ -1,74 +1,57 @@
 import React, { Component } from 'react';
+import { easyComp } from 'react-easy-state';
 import './App.css';
-import 'react-select/dist/react-select.css';
-import Select from 'react-select';
 
 import Card from './Components/Card/Card.jsx';
-import Center from './Components/Center/Center.jsx';
 import Currency from './Components/Currency/Currency.jsx';
 
+import PRICE_STORE from './Store/priceStore';
+
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
-    this.state = {
-      pair: null,
-      price: null,
-    }
-
-    this.onSelectPair = this.onSelectPair.bind(this);
-    this.initSocket = this.initSocket.bind(this);
+    this.sockets = this.initSockets('ethusd', 'btcusd');
   }
 
-  initSocket(pair) {
-    this.socket = new WebSocket(`wss://api.gemini.com/v1/marketdata/${pair}`);
-
-    this.socket.onmessage = evt =>
-      this.setState({
-        price: JSON.parse(evt.data).events[0].price
-      });
+  componentWillUnmount() {
+    Object.keys(this.sockets).forEach(key =>
+      this.sockets[key].close());
   }
 
-  onSelectPair(selection) {
-    if (this.state.pair !== selection.value) {
-      this.socket && this.socket.close();
-      this.setState({
-        pair: selection.value,
-        price: null,
-      }, () => this.initSocket(selection.value));
-    }
+  initSockets(...pairs) {
+    return pairs.reduce((sockets, pair) => {
+      sockets[pair] = new WebSocket(`wss://api.gemini.com/v1/marketdata/${pair}`);
+
+      sockets[pair].onmessage = evt => {
+        PRICE_STORE.updatePrice({
+          pair,
+          price: JSON.parse(evt.data).events[0].price,
+        })
+      }
+
+      return sockets;
+    }, {});
   }
 
   render() {
-    const options = [
-      { value: 'ethusd', label: 'ETH/USD' },
-      { value: 'btcusd', label: 'BTC/USD' }
-    ];
-
-
     return(
       <div className="App">
-        <Center>
-          <Card>
-            <Select
-              className="Select"
-              clearable={false}
-              placeholder="Select Pair..."
-              name="form-field-name"
-              onChange={this.onSelectPair}
-              options={options}
-              searchable={false}
-              value={this.state.pair}
-            />
-            <Currency
-              symbol="usd"
-              value={this.state.price}
-            />
-          </Card>
-        </Center>
+        <Card>
+          <Currency
+            symbol="usd"
+            value={PRICE_STORE.prices['ethusd']}
+          />
+        </Card>
+        <Card>
+          <Currency
+            symbol="usd"
+            value={PRICE_STORE.prices['btcusd']}
+          />
+        </Card>
       </div>
     );
   }
 }
 
-export default App;
+export default easyComp(App);

@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@nx-js/observer-util@^3.1.3":
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/@nx-js/observer-util/-/observer-util-3.1.3.tgz#e90043eecc09b2aa7485459b7ea3616a8da53718"
+
 abab@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
@@ -4331,6 +4335,10 @@ normalize-url@^1.4.0:
     query-string "^4.1.0"
     sort-keys "^1.0.0"
 
+normalize.css@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/normalize.css/-/normalize.css-7.0.0.tgz#abfb1dd82470674e0322b53ceb1aaf412938e4bf"
+
 npm-run-path@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-2.0.2.tgz#35a9232dfa35d7067b4cb2ddf2357b1871536c5f"
@@ -5149,6 +5157,12 @@ react-dev-utils@^4.0.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
     prop-types "^15.5.10"
+
+react-easy-state@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-easy-state/-/react-easy-state-3.0.1.tgz#0854d65ebeff5479e2aef203a4f8a4de235467d3"
+  dependencies:
+    "@nx-js/observer-util" "^3.1.3"
 
 react-error-overlay@^2.0.1:
   version "2.0.1"
