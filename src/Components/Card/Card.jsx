@@ -1,5 +1,5 @@
 import React from 'react';
-import { easyComp } from 'react-easy-state'
+import { easyComp } from 'react-easy-state';
 
 const Card = ({ children = null }) =>
   <div className="Card">
