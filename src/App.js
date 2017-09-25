@@ -29,10 +29,10 @@ class App extends Component {
       const priceUpdate = evt =>
         PRICE_STORE.updatePrice({
           pair,
-          price: parseFloat(JSON.parse(evt.data).events[0].price).toFixed(2),
+          price: parseFloat(JSON.parse(evt.data).events[0].price),
         });
 
-      const PRICE_THROTTLE_MS = 1000;
+      const PRICE_THROTTLE_MS = 2000;
       const throttledUpdate = _.throttle(priceUpdate, PRICE_THROTTLE_MS);
 
       sockets[pair].onmessage = evt =>
@@ -51,8 +51,9 @@ class App extends Component {
           {Object.keys(prices).map(pair =>
             <Card key={pair}>
               <Currency
-                symbol="usd"
+                delta={prices[pair].delta}
                 value={prices[pair].price}
+                symbol="usd"
               />
             </Card>
           )}
