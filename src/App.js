@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { easyComp } from 'react-easy-state';
+import _ from 'lodash';
 import './App.css';
 
 import Card from './Components/Card/Card.jsx';
@@ -12,7 +13,7 @@ class App extends Component {
   constructor() {
     super();
 
-    this.sockets = this.initSockets('ethusd', 'btcusd');
+    // this.sockets = this.initSockets('ethusd', 'btcusd');
   }
 
   componentWillUnmount() {
@@ -24,12 +25,17 @@ class App extends Component {
     return pairs.reduce((sockets, pair) => {
       sockets[pair] = new WebSocket(`wss://api.gemini.com/v1/marketdata/${pair}`);
 
-      sockets[pair].onmessage = evt => {
+      const priceUpdate = evt =>
         PRICE_STORE.updatePrice({
           pair,
           price: JSON.parse(evt.data).events[0].price,
-        })
-      }
+        });
+
+      const PRICE_THROTTLE_MS = 1000;
+      const throttledUpdate = _.throttle(priceUpdate, PRICE_THROTTLE_MS);
+
+      sockets[pair].onmessage = evt =>
+        throttledUpdate(evt);
 
       return sockets;
     }, {});
