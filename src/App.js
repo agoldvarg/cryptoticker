@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { easyComp } from 'react-easy-state';
 import _ from 'lodash';
+import FlipMove from 'react-flip-move';
+
 import './App.css';
 
 import Card from './Components/Card/Card.jsx';
@@ -13,7 +15,7 @@ class App extends Component {
   constructor() {
     super();
 
-    // this.sockets = this.initSockets('ethusd', 'btcusd');
+    this.sockets = this.initSockets('ethusd', 'btcusd');
   }
 
   componentWillUnmount() {
@@ -42,21 +44,20 @@ class App extends Component {
   }
 
   render() {
+    const { prices } = PRICE_STORE;
+
     return(
       <div className="App">
-        <PortfolioPage />
-        <Card>
-          <Currency
-            symbol="usd"
-            value={PRICE_STORE.prices['ethusd']}
-          />
-        </Card>
-        <Card>
-          <Currency
-            symbol="usd"
-            value={PRICE_STORE.prices['btcusd']}
-          />
-        </Card>
+        <FlipMove duration={300} easing="ease-out">
+          {Object.keys(prices).map(pair =>
+            <Card key={pair}>
+              <Currency
+                symbol="usd"
+                value={prices[pair]}
+              />
+            </Card>
+          )}
+        </FlipMove>
       </div>
     );
   }
