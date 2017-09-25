@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { easyComp } from 'react-easy-state';
+import FlipMove from 'react-flip-move';
+
 import './App.css';
 
 import Card from './Components/Card/Card.jsx';
@@ -35,20 +37,20 @@ class App extends Component {
   }
 
   render() {
+    const { prices } = PRICE_STORE;
+
     return(
       <div className="App">
-        <Card>
-          <Currency
-            symbol="usd"
-            value={PRICE_STORE.prices['ethusd']}
-          />
-        </Card>
-        <Card>
-          <Currency
-            symbol="usd"
-            value={PRICE_STORE.prices['btcusd']}
-          />
-        </Card>
+        <FlipMove duration={300} easing="ease-out">
+          {Object.keys(prices).map(pair =>
+            <Card key={pair}>
+              <Currency
+                symbol="usd"
+                value={prices[pair]}
+              />
+            </Card>
+          )}
+        </FlipMove>
       </div>
     );
   }
