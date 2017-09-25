@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { easyComp } from 'react-easy-state';
 import _ from 'lodash';
+
 import FlipMove from 'react-flip-move';
-
-import './App.css';
-
 import Card from './Components/Card/Card.jsx';
 import Currency from './Components/Currency/Currency.jsx';
-import PortfolioPage from './Components/Page/PortfolioPage.jsx';
 
 import PRICE_STORE from './Store/priceStore';
+
+import './App.css';
 
 class App extends Component {
   constructor() {
@@ -30,7 +29,7 @@ class App extends Component {
       const priceUpdate = evt =>
         PRICE_STORE.updatePrice({
           pair,
-          price: JSON.parse(evt.data).events[0].price,
+          price: parseFloat(JSON.parse(evt.data).events[0].price).toFixed(2),
         });
 
       const PRICE_THROTTLE_MS = 1000;
@@ -53,7 +52,7 @@ class App extends Component {
             <Card key={pair}>
               <Currency
                 symbol="usd"
-                value={prices[pair]}
+                value={prices[pair].price}
               />
             </Card>
           )}
