@@ -4,6 +4,7 @@ import './App.css';
 
 import Card from './Components/Card/Card.jsx';
 import Currency from './Components/Currency/Currency.jsx';
+import PortfolioPage from './Components/Page/PortfolioPage.jsx';
 
 import PRICE_STORE from './Store/priceStore';
 
@@ -37,6 +38,7 @@ class App extends Component {
   render() {
     return(
       <div className="App">
+        <PortfolioPage />
         <Card>
           <Currency
             symbol="usd"
