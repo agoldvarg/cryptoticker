@@ -41,6 +41,7 @@
     "react-flip-move": "2.9.15",
     "react-select": "1.0.0-rc.10",
     "sass-loader": "6.0.6",
+    "socket.io": "2.0.3",
     "style-loader": "0.18.2",
     "sw-precache-webpack-plugin": "0.11.4",
     "url-loader": "0.5.9",
