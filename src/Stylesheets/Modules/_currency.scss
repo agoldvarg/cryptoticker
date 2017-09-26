@@ -1,0 +1,39 @@
+.Currency {
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid white;
+  color: black;
+  display: flex;
+  font-size: 2rem;
+  font-weight: bold;
+  height: 80px;
+  justify-content: center;
+  letter-spacing: 1px;
+  line-height: 76px;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+
+  &__symbol {
+    display: inline-block;
+  }
+
+  &__value {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  &__indicators {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &--up {
+    color: green;
+  }
+
+  &--down {
+    color: red;
+  }
+}

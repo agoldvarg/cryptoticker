@@ -1,0 +1,47 @@
+.Card {
+  background-color: rgba(0,0,0, 0.85);
+  border-radius: 3px;
+  box-shadow: 0px 0px 2px 1px rgba(0,0,0, 0.2);
+  display: inline-flex;
+  flex-direction: column;
+  height: 200px;
+  justify-content: flex-end;
+  margin-right: 6px;
+  padding: 40px;
+  position: relative;
+  width: 300px;
+
+  &__badge {
+    color: white;
+    font-family: 'OpenSansSemiBold';
+    font-size: 40px;
+    left: 20px;
+    position: absolute;
+    text-transform: uppercase;
+    top: 20px;
+  }
+
+  &--btcusd::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-mask: url('../Images/BTC-alt.svg') no-repeat;
+    background-color: rgba(255,255,255, 0.1);
+    content: '';
+    display: block;
+  }
+
+  &--ethusd::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-mask: url('../Images/BTC-alt.svg') no-repeat;
+    background-color: rgba(255,255,255, 0.1);
+    content: '';
+    display: block;
+  }
+}
