@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Select from 'react-select';
 import { easyComp } from 'react-easy-state';
 import { subscribeTo, unsubscribe } from './Services/cryptocompareService';
 
@@ -10,17 +11,42 @@ import PRICE_STORE from './Stores/priceStore';
 
 import './App.css';
 
+const ROOT_CURRENCIES = ['eth'];
 const DEFAULT_PAIRS = ['btc/usd', 'eth/usd', 'omg/usd'];
 
 class App extends Component {
   constructor() {
     super();
 
-    this.subscribe(DEFAULT_PAIRS);
+    this.store = {
+      availablePairs: [],
+    }
+
+    // this.subscribe(DEFAULT_PAIRS);
+    this.fetchTopPairsList();
   }
 
   componentWillUnmount() {
     DEFAULT_PAIRS.forEach(pair => unsubscribe(pair));
+  }
+
+  fetchTopPairsList() {
+    ROOT_CURRENCIES.forEach(symbol => {
+      fetch(`https://min-api.cryptocompare.com/data/top/pairs?fsym=${symbol.toUpperCase()}&limit=10`)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error();
+          }
+
+          return res.text()
+        })
+        .then(json => {
+          const data = JSON.parse(json).Data;
+
+          this.store.availablePairs = Object.keys(data).map(key =>
+            `${data[key].fromSymbol}/${data[key].toSymbol}`);
+        });
+    });
   }
 
   subscribe(pairs) {
@@ -41,8 +67,26 @@ class App extends Component {
   render() {
     const { prices } = PRICE_STORE;
 
+    let options = [
+      { value: 'one', label: 'One' },
+      { value: 'two', label: 'Two' }
+    ];
+
+    options = this.store.availablePairs.map(pair => {
+      return {
+        value: pair,
+        label: pair,
+      }
+    });
+
     return(
       <div className="App">
+        <Select
+          name="form-field-name"
+          options={options}
+          clearable={false}
+          placeholder="Select Pairs..."
+        />
         <FlipMove duration={300} easing="ease-out">
           {Object.keys(prices).map(pair =>
             <Card badge={pair} key={pair}>
