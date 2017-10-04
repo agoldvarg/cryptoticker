@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Select from 'react-select';
 import { easyComp } from 'react-easy-state';
 import { subscribeTo, unsubscribe } from './Services/cryptocompareService';
 
@@ -11,7 +10,7 @@ import PRICE_STORE from './Stores/priceStore';
 
 import './App.css';
 
-const ROOT_CURRENCIES = ['eth'];
+const ROOT_CURRENCIES = ['eth', 'btc'];
 const DEFAULT_PAIRS = ['btc/usd', 'eth/usd', 'omg/usd'];
 
 class App extends Component {
@@ -43,8 +42,9 @@ class App extends Component {
         .then(json => {
           const data = JSON.parse(json).Data;
 
-          this.store.availablePairs = Object.keys(data).map(key =>
-            `${data[key].fromSymbol}/${data[key].toSymbol}`);
+          this.store.availablePairs = this.store.availablePairs
+            .concat(Object.keys(data).map(key =>
+              `${data[key].fromSymbol}/${data[key].toSymbol}`));
         });
     });
   }
@@ -67,26 +67,8 @@ class App extends Component {
   render() {
     const { prices } = PRICE_STORE;
 
-    let options = [
-      { value: 'one', label: 'One' },
-      { value: 'two', label: 'Two' }
-    ];
-
-    options = this.store.availablePairs.map(pair => {
-      return {
-        value: pair,
-        label: pair,
-      }
-    });
-
     return(
       <div className="App">
-        <Select
-          name="form-field-name"
-          options={options}
-          clearable={false}
-          placeholder="Select Pairs..."
-        />
         <FlipMove duration={300} easing="ease-out">
           {Object.keys(prices).map(pair =>
             <Card badge={pair} key={pair}>
