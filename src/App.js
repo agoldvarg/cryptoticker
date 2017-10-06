@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { easyComp } from 'react-easy-state';
+
+// Choose cryptocompare or gemini as your data source
 import { subscribeTo, unsubscribe } from './Services/cryptocompareService';
+// import { subscribeTo, unsubscribe } from './Services/geminiService';
 
 import FlipMove from 'react-flip-move';
 import Card from './Components/Card/Card.jsx';
@@ -10,7 +13,7 @@ import PRICE_STORE from './Stores/priceStore';
 
 import './App.css';
 
-const DEFAULT_PAIRS = ['btc/usd', 'eth/usd', 'omg/usd'];
+const DEFAULT_PAIRS = ['btc/usd', 'eth/usd'];
 
 class App extends Component {
   constructor() {
