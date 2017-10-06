@@ -1,57 +1,44 @@
 import React, { Component } from 'react';
 import { easyComp } from 'react-easy-state';
 
+// Choose cryptocompare or gemini as your data source
+import { subscribeTo, unsubscribe } from './Services/cryptocompareService';
+// import { subscribeTo, unsubscribe } from './Services/geminiService';
+
 import FlipMove from 'react-flip-move';
 import Card from './Components/Card/Card.jsx';
 import Currency from './Components/Currency/Currency.jsx';
 
-import PRICE_STORE from './Store/priceStore';
+import PRICE_STORE from './Stores/priceStore';
 
 import './App.css';
+
+const DEFAULT_PAIRS = ['btc/usd', 'eth/usd'];
 
 class App extends Component {
   constructor() {
     super();
 
-    this.sockets = this.initSockets('eth/usd', 'btc/usd');
+    this.subscribe(DEFAULT_PAIRS);
   }
 
   componentWillUnmount() {
-    Object.keys(this.sockets).forEach(key =>
-      this.sockets[key].close());
+    DEFAULT_PAIRS.forEach(pair => unsubscribe(pair));
   }
 
-  initSockets(...pairs) {
-    const { updatePrice, prices } = PRICE_STORE;
-    return pairs.reduce((sockets, pair) => {
-      sockets[pair] = new WebSocket(`wss://api.gemini.com/v1/marketdata/${pair.replace('/', '')}`);
+  subscribe(pairs) {
+    const { updatePrice } = PRICE_STORE;
 
-      sockets[pair].onmessage = evt => {
-        const events = JSON.parse(evt.data).events
-        const trades = events.filter(event => event.type === 'trade');
-        const prevPrice = prices[pair];
+    const filterUpdates = (unpacked) => {
+      if (unpacked.PRICE) {
+        const pair = `${unpacked.FROMSYMBOL.toLowerCase()}/${unpacked.TOSYMBOL.toLowerCase()}`
+        const price = parseFloat(unpacked.PRICE);
 
-        const BOGUS_PRICE = '0.01';
-        let price = BOGUS_PRICE;
-
-        if (!prevPrice) {
-          price = events[0].price;
-        }
-
-        if (trades.length) {
-          price = trades[0].price
-        }
-
-        if (price !== BOGUS_PRICE) {
-          updatePrice({
-            pair,
-            price: parseFloat(price)
-          });
-        }
+        updatePrice({ pair, price });
       }
+    };
 
-      return sockets;
-    }, {});
+    subscribeTo(pairs, filterUpdates);
   }
 
   render() {
