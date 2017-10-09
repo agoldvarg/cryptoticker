@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { easyComp } from 'react-easy-state';
+import PRICE_STORE from './Stores/priceStore';
 
 // Choose cryptocompare or gemini as your data source
 import { subscribeTo, unsubscribe } from './Services/cryptocompareService';
 // import { subscribeTo, unsubscribe } from './Services/geminiService';
 
 import FlipMove from 'react-flip-move';
-import Card from './Components/Card/Card.jsx';
-import Currency from './Components/Currency/Currency.jsx';
+import Header from './Components/Header/Header';
+import Card from './Components/Card/Card';
+import Currency from './Components/Currency/Currency';
 
-import PRICE_STORE from './Stores/priceStore';
 
 import './App.css';
 
@@ -46,17 +47,20 @@ class App extends Component {
 
     return(
       <div className="App">
-        <FlipMove duration={300} easing="ease-out">
-          {Object.keys(prices).map(pair =>
-            <Card badge={pair} key={pair}>
-              <Currency
-                delta={prices[pair].delta}
-                value={prices[pair].price}
-                symbol="usd"
-              />
-            </Card>
-          )}
-        </FlipMove>
+        <Header />
+        <div className="Page">
+          <FlipMove duration={300} easing="ease-out">
+            {Object.keys(prices).map(pair =>
+              <Card badge={pair} key={pair}>
+                <Currency
+                  delta={prices[pair].delta}
+                  value={prices[pair].price}
+                  symbol="usd"
+                />
+              </Card>
+            )}
+          </FlipMove>
+        </div>
       </div>
     );
   }
